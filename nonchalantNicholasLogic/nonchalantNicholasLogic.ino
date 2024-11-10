@@ -36,20 +36,11 @@ void setup() {
 
   delay(1000);
   stepper.setSpeed(500);
+
+  push();
+  delay(1000);
+  pull();
 }
-
-
-
-
-void pull() {
-  for (angle = 150; angle > 30; angle--) {
-    servo.write(angle);
-    delay(15);
-  }
-}
-
-
-
 
 int rotateToPosition(int position) {
   while (stepper.currentPosition() != position) {
@@ -64,10 +55,14 @@ int rotateToPosition(int position) {
   return;
 }
 
-
-
-
 void push() {
+  for (angle = 150; angle > 30; angle--) {
+    servo.write(angle);
+    delay(15);
+  }
+}
+
+void pull() {
   for (angle = 30; angle < 150; angle++) {
     servo.write(angle);
     delay(15);
