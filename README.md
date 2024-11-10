@@ -1,4 +1,5 @@
 # HackUmass 2024 Project - Nonchalant Nicholas
+DevPost Submission: https://devpost.com/software/nonchalant-nicholas#updates
 ## Inspiration
 The inspiration for this project was finding an easier way to locate spices in a spice cabinet and develop the evolution of the lazy Susan.
 
