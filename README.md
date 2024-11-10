@@ -15,8 +15,12 @@ The main challenge for the hardware was designing the project's main components 
 ## Accomplishments that we're proud of
 Hardware: designing/3D printing our gear and rack, finding a design so that wires are not in the way
 
+Software: getting the client web app to interact with the Arduino indirectly through the NodeJS server
+
 ## What we learned
-Hardware: CAD, 3D printing, Arduino hardware (stepper motor, servo) Software: Node.js, HTML, Arduino code
+Hardware: CAD, 3D printing, Arduino hardware (stepper motor, servo) 
+
+Software: Node.js, HTML, Arduino code
 
 ## What's next for Nonchalant Nicholas
 To continue this project, we would add voice activation, seasoning presets, and a manual operation mode. Additionally, we could expand the project's use to dispense other items like snacks, medicine, and drinks.
