@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
     <head>
         <title> Nonchalant Nicholas Control Panel </title>
@@ -11,4 +11,221 @@
         <div id="app"></div>
         </center>
     </body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nonchalant Nicholas</title>
+</head>
+<body>
+    <!-- <form action="POST">
+        <label for="firstName">firstName: </label>
+        <input type="text" name="firstName">
+        <input type="submit" value="send">
+    </form> -->
+    <!-- <link rel="stylesheet" href="main.css"/>
+    <script type="module" src="main.js"></script>
+    <h1>Nonchalant Nicholas</h1>
+    <div id="app"></div> -->
+    <style>
+        .container {
+            width: 400px;
+            padding: 20px;
+            border: 1px solid #000;
+            margin: 20px auto;
+        }
+        .searchBox {
+            display: flex;
+            width: 400px;
+            height: 30px;
+            margin-bottom: 20px;
+        }
+        .searchBox input[type="checkbox"]{
+            width: 200px;
+            height: 15px;
+        }
+        .searchBox input[type="text"] {
+            flex: 1;
+            width:10%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-right: none;
+            cursor:pointer;
+        }
+        .searchBox input[type="button"] {
+            width:10%;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .searchBox input[type="submit"] {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .spiceSlots {
+            margin-top:0;
+            /* padding: 20px; */
+            border: 1px solid #000;
+            text-align: center;
+        }
+        .sliceSlotItem {
+            margin: 10px 0;
+            cursor: pointer;
+        }
+
+    </style>
+    
+    <div class="container">
+        <!-- Search Box -->
+         <center>
+            <h2>Nonchalant Nicholas</h2>
+         </center>
+        <form class="searchBox" action="POST">
+            <select id="spiceSelect" name="spiceSelect">
+                <option value='1'>Select Spice...</option>
+            </select>
+            <input type="button" id="add" value="Add Spice">
+            <input type="submit" id="retrieve" value="Retrieve">
+        </form>
+        <div class="tempSpices" id="tempSpices">
+        </div>
+ 
+ 
+        <!-- Spice Slots Container -->
+        <div class="spiceSlots" id="spiceSlots"> <h3>Tap Spice to Edit Label</h3>
+        </div>
+    </div>
+ 
+    <script>
+        const updateDrop = () => {
+            const spiceDrop = document.getElementById("spiceSelect");
+            spiceDrop.innerHTML = "<option value='0'>Select Spice...</option>";
+            for(let i = 1; i < 6; i++){
+                if(localStorage.getItem(`spiceSlot${i}`) !== null){
+                    let option = document.createElement("option");
+                    option.value = i;
+                    option.id =  localStorage.getItem(`spiceSlot${i}`);
+                    option.innerText = localStorage.getItem(`spiceSlot${i}`);
+                    spiceDrop.appendChild(option);
+                }
+            }
+            localStorage.setItem("tempSpices", JSON.stringify([]));
+            localStorage.setItem("tempSpicesNums", "");
+        }
+        updateDrop();
+        // Number of spice slots
+        const numSlots = 5;
+
+        //temp storage to send grouped spices to server
+        const addButton = document.getElementById("add");
+        addButton.addEventListener("click", () =>{
+            const form = document.querySelector("form");
+            const index = form.elements[0].value;
+            const spice = localStorage.getItem(`spiceSlot${index}`);
+            console.log(spice);
+            if(localStorage.getItem("tempSpices") === null){
+                localStorage.setItem("tempSpices", JSON.stringify([]));
+            }
+            if(localStorage.getItem("tempSpicesNums") === null){
+                localStorage.setItem("tempSpicesNums", "");
+            }
+            let spiceList = JSON.parse(localStorage.getItem("tempSpices"));
+            let spiceNumList = localStorage.getItem("tempSpicesNums");
+            const linSearch = (arr, target) => {
+                if(arr.length === 0){
+                    return false;
+                }
+                arr.forEach(e =>{
+                    if (e.localeCompare(target) === 0){
+                        return true;
+                    }
+                });
+                return false;
+            }
+            if(!linSearch(spiceList, spice)){
+                spiceList.push(spice);
+                console.log("index: " + index);
+                spiceNumList = spiceNumList + index;
+                console.log(spiceNumList);
+                console.log(spice);
+                localStorage.setItem("tempSpices", JSON.stringify(spiceList));
+                localStorage.setItem("tempSpicesNums", spiceNumList);
+                const remOpt = document.getElementById(spice);
+                remOpt.remove();
+                const tempSpiceBox = document.getElementById("tempSpices");
+                const spiceLabel = document.createTextNode(spice + " ");
+                tempSpiceBox.appendChild(spiceLabel);
+            }
+        });
+
+        // Function to handle "Retrieve" button click
+        // const retrieveButton = document.getElementById("retrieve");
+        // retrieveButton.addEventListener("click", () =>{
+        //     alert("Nicholas: Sending Spice Requested");
+        // });
+
+
+        // Function to create the spice slots dynamically
+        function createSpiceSlots() {
+            const spiceSlotsContainer = document.getElementById("spiceSlots");
+
+
+            // Create each spice slot
+            for (let i = 1; i <= numSlots; i++) {
+                const spiceName = localStorage.getItem(`spiceSlot${i}`) || "Enter spice here";
+                const spiceSlot = document.createElement("div");
+                spiceSlot.classList.add("sliceSlotItem");
+                spiceSlot.textContent = `Spice ${i}: ${spiceName}`;
+                spiceSlot.onclick = () => editSpiceName(spiceSlot, i);
+                spiceSlotsContainer.appendChild(spiceSlot);
+            }
+        }
+
+
+        function editSpiceName(element, slotNumber) {
+            const currentSpice = element.textContent.split(": ")[1];
+            const newSpiceName = prompt("Enter new spice name:", currentSpice);
+
+
+            if (newSpiceName) {
+                element.textContent = `Spice ${slotNumber}: ${newSpiceName}`;
+                localStorage.setItem(`spiceSlot${slotNumber}`, newSpiceName);
+                updateDrop();
+            }
+        }
+
+
+        window.onload = createSpiceSlots;
+
+        const form = document.querySelector("form");
+        form.addEventListener("submit", event =>{
+            event.preventDefault();
+            //console.log("pressed");
+            //let payload = localStorage.getItem("tempSpicesNums");
+            //this is no longer sent, send string of numbers
+            // let elements = form.elements;
+            // for(let i = 0; i < elements.length; i++){
+            //     if(elements[i].type !== "submit"){
+            //         console.log(elements[i].value);
+            //         payload[elements[i].name] = elements[i].value;
+            //     }
+            // }
+            //
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/");
+            // console.log(payload);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            const payloadString = localStorage.getItem("tempSpicesNums"); //JSON.stringify(payload);
+            console.log(payloadString.split("").reverse().join(""));
+            xhr.send(payloadString.split("").reverse().join(""));
+
+            const tempSpiceBox = document.getElementById("tempSpices");
+            tempSpiceBox.innerText = "";
+            updateDrop();
+        });
+    </script>
+</body>
 </html>
