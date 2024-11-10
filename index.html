@@ -189,8 +189,14 @@
             const currentSpice = element.textContent.split(": ")[1];
             const newSpiceName = prompt("Enter new spice name:", currentSpice);
 
-
-            if (newSpiceName) {
+            console.log(newSpiceName.localeCompare("Enter spice here"));
+            if(newSpiceName.localeCompare("") === 0 || newSpiceName.localeCompare("Enter spice here") === 0){
+                element.textContent = `Spice ${slotNumber}: Enter spice here`;
+                //localStorage.setItem(`spiceSlot${slotNumber}`, "");
+                localStorage.removeItem(`spiceSlot${slotNumber}`);
+                updateDrop();
+            }
+            else if (newSpiceName.localeCompare("") !== 0) {
                 element.textContent = `Spice ${slotNumber}: ${newSpiceName}`;
                 localStorage.setItem(`spiceSlot${slotNumber}`, newSpiceName);
                 updateDrop();
